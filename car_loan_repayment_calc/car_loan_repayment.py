@@ -1,6 +1,12 @@
 import logging
 
 def calculate_monthly_repayment(car_price: float, number_of_years: int, annual_interest_rate: float, deposit: float) -> tuple[float, int, float, float]:
+
+    logging.info(
+        f"Calculating monthly repayment with price={car_price}, years={number_of_years}, "
+        f"annual_interest_rate={annual_interest_rate}, deposit={deposit}")
+
+
     if car_price < 0:
         raise ValueError("Car price cannot be negative")
     
@@ -25,7 +31,9 @@ def calculate_monthly_repayment(car_price: float, number_of_years: int, annual_i
     else:
         monthly_repayment = loan_amount * monthly_interest_rate/(1-(1+monthly_interest_rate)**(-number_of_payments))
 
-    return monthly_repayment, 
+    logging.info(f"Calculated monthly repayment: {monthly_repayment}")
+
+    return monthly_repayment  
 
 def get_user_input() -> tuple[float, int, float, float]:
     try:
@@ -38,12 +46,21 @@ def get_user_input() -> tuple[float, int, float, float]:
         logging.error("Invalid input. Please enter numeric values.")
         raise ValueError("Invalid input. Please enter a valid number")
     
+    logging.info(
+        f"User input received: price={car_price}, years={number_of_years}, "
+        f"annual_interest_rate={annual_interest_rate}, deposit={deposit}"
+    )
+    
     return car_price, number_of_years, annual_interest_rate, deposit
 
 def main():
-    car_price, number_of_years, annual_interest_rate, deposit = get_user_input()
-    monthly_repayment = calculate_monthly_repayment(car_price, number_of_years, annual_interest_rate, deposit)
-    print(f"Monthly repayment: {monthly_repayment}")
+    try:
+        car_price, number_of_years, annual_interest_rate, deposit = get_user_input()
+        monthly_repayment = calculate_monthly_repayment(car_price, number_of_years, annual_interest_rate, deposit)
+        print(f"Monthly repayment: {monthly_repayment}")
+    except ValueError as e:
+        logging.error(f"Error in calculation: {e}")
+        print(f"Error: {e}")
 
 # entry point
 if __name__ == "__main__":
